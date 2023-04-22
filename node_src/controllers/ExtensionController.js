@@ -34,8 +34,13 @@ class ExtensionController{
 
             //const valueString = data.extension[0].valueString;
 
-            const samples = data.component;
-            console.log(samples);
+            /*var components = data.component;
+            console.log(components);
+            console.log(components[0].valueSampledData.data);
+            components[0].valueSampledData.data = "maria";
+            console.log(components[0].valueSampledData.data);
+
+            console.log(JSON.stringify(data, ['status']));*/
 
             /*let response = {
                 "id": id,

@@ -1,5 +1,6 @@
 const path = require("path");
 const express = require("express");
+const fileUpload = require("express-fileupload");
 const app = express();
 const bp = require('body-parser');
 const apiRouter = require('./routers/ApiRouter');
@@ -18,7 +19,8 @@ app.set('view engine', 'html');
 app.use(bp.json({limit: '50mb', extended: true}))
   .use(bp.urlencoded({limit: '50mb',extended: true }))
   .use(apiRouter)
+  .use(express.static(path.join(process.cwd(), "html_src")));
 
 app.listen(PORT, () => {
-  console.log("server started: " + PORT)
+  console.log("server started: " + PORT);
 })
