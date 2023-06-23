@@ -74,10 +74,17 @@
                 </div>
 
                 <div id="send" class="line">
-                    <input type="submit" id="btn_send">
+                    <input type="submit" id="btn_send" >
                 </div>
             </form>
         </div>
+
+        <div id="minhaDiv">
+            <input type="text" id="my_text">
+        </div>
+        <!--<canvas id="minhaDiv">
+            <input type="text" id="my_text">
+        </canvas>-->
     </div>
 
     <footer>
@@ -96,6 +103,7 @@
     </footer>
 
     <script type="text/javascript">
+        document.getElementById('minhaDiv').style.display = 'none';
         const form = document.getElementById('json_form');
 
         var resourceType = document.getElementById('resource_type');
@@ -134,8 +142,22 @@
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(response)
-            }).then(res => res.json()).then(data => console.log(data));
+            })
+            .then(res => res.json())
+            .then(function(res){
+                console.log(res);
+                Mudarestado('minhaDiv', res);
+            });
         });
+
+        function Mudarestado(el, data) {
+            var display = document.getElementById(el).style.display;
+            if(display == "none"){
+                document.getElementById(el).style.display = 'block';
+                var myText = document.getElementById('my_text');
+                myText.value = data;
+            }
+        }
 
     </script>
 </body>

@@ -18,6 +18,7 @@ class OperationController{
         try{
             const run = new runScript();
 
+            console.log("Body!!");
             console.log(req.body);
 
             var resourceType = req.body.resourceType;
@@ -29,7 +30,20 @@ class OperationController{
             var inputParams = req.body.inputParams;
             var returnOnlyFieldComponent = req.body.component.returnOnlyFieldsComponent;
 
+            /*if(id != ""){
+                const { data } = await apiRequest.get('Observation/'+id);
+                if(data){
+                    var components = data.component;
+                }else{
+                    return res.send("ERRO_02 - Component Vazio");
+                }
+            }else{
+                return res.send("ERRO_01 - Campo ID nulo!");
+            }*/
             const { data } = await apiRequest.get('Observation/'+id);
+            console.log("Promisse!!");
+            console.log(data.component);
+
             var components = data.component;
 
             if(haveInputParams){

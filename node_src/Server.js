@@ -1,9 +1,12 @@
 const path = require("path");
 const express = require("express");
-const fileUpload = require("express-fileupload");
+//const fileUpload = require("express-fileupload");
 const app = express();
 const bp = require('body-parser');
 const apiRouter = require('./routers/ApiRouter');
+const directRouter = require('./routers/DirectRouter');
+const extensionRouter = require('./routers/ExtensionRouter');
+const operationRouter = require('./routers/OperationRouter');
 require("dotenv").config();
 
 const PORT = process.env.SERVER_PORT;
@@ -14,11 +17,14 @@ let allowCrossDomain = (req, res, next) => {
   next();
 }
 
-app.set('view engine', 'html');
+app.set('view engine', 'ejs');
 
 app.use(bp.json({limit: '50mb', extended: true}))
   .use(bp.urlencoded({limit: '50mb',extended: true }))
   .use(apiRouter)
+  .use(directRouter)
+  .use(extensionRouter)
+  .use(operationRouter)
   .use(express.static(path.join(process.cwd(), "html_src")));
 
 app.listen(PORT, () => {

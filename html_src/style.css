@@ -208,3 +208,18 @@ footer{
 #if_cloud_logo{
     height: 3vh;
 }
+
+.alert{
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.5);
+    border: 2px solid rgb(214, 193, 6);
+    border-radius: 10px;
+    margin: 5px 0 5px 0;
+    padding: 15px;
+}
+
+.p_alert{
+    font-weight: bold;
+    color: red;
+}

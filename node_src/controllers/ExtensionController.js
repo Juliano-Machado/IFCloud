@@ -7,23 +7,29 @@ class ExtensionController{
 
     async runScriptByPatientId(req, res){
         try{
-            const id = req.params.id;
-            const { data } = await api.get('Patient/'+id);
+            if(!!data.extension){
+                const id = req.params.id;
+                const { data } = await api.get('Patient/'+id);
 
-            const patientName = data.name[0].given;
-            const scriptName = data.extension[0].valueString;
+                const patientName = data.name[0].given;
+                const scriptName = data.extension[0].valueString;
 
-            let response = {
-                "id": id,
-                "valueString": scriptName
-            };
+                let response = {
+                    "id": id,
+                    "valueString": scriptName
+                };
 
-            console.log(response);
+                console.log(response);
 
-            res.send(run.runPythonScript(scriptName));
+                return res.send(run.runPythonScript(scriptName));
+            }else{
+                console.log(data);
+                console.log("Field \"Extension\" doesn't exist!");
+                return res.send("Field \"Extension\" doesn't exist in this resource!");
+            }
         }catch(e){
             console.log(e);
-            res.status(e.statusCode || 500).json(e.message);
+            return res.status(e.statusCode || 500).json(e.message);
         }
     }
 
@@ -32,29 +38,30 @@ class ExtensionController{
             const id = req.params.id;
             const { data } = await api.get('Observation/'+id);
 
-            //const valueString = data.extension[0].valueString;
+            if(!!data.extension){
+                const valueString = data.extension[0].valueString;
 
-            /*var components = data.component;
-            console.log(components);
-            console.log(components[0].valueSampledData.data);
-            components[0].valueSampledData.data = "maria";
-            console.log(components[0].valueSampledData.data);
+                var components = data.component;
+                console.log(components);
+                console.log(components[0].valueSampledData.data);
+                components[0].valueSampledData.data = "maria";
+                console.log(components[0].valueSampledData.data);
 
-            console.log(JSON.stringify(data, ['status']));*/
+                let response = {
+                    "id": id,
+                    "valueString": valueString,
+                    "sampledData": samples
+                };
 
-            /*let response = {
-                "id": id,
-                "valueString": valueString,
-                "sampledData": samples
-            };
-
-            console.log(response);*/
-
-            //res.send(run.runPythonScript(valueString, samples));
-            res.json(data);
+                return res.send(run.runPythonScript(valueString, samples));
+            }else{
+                console.log(data);
+                console.log("Field \"Extension\" doesn't exist in this resource!");
+                return res.send("Field \"Extension\" doesn't exist in this resource!");
+            }
         }catch(e){
             console.log(e);
-            res.status(e.statusCode || 500).json(e.message);
+            return res.status(e.statusCode || 500).json(e.message);
         }
     }
 }
