@@ -6,29 +6,18 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="/style.css">
-    <title>IFCloud File Upload</title>
+    <title>IFCloud Server Files</title>
 </head>
 <body>
     <%- include('./partials/header.ejs') %>
 
-    <div id="content">
-        <div id="card">
-            <form id="file_upload_form" action="/ifcloud/uploader" name="script" enctype="multipart/form-data" method="POST">
-                <div class="line">
-                    <h2>File Uploader</h2>
-                </div>
-
-                <div id="line_file" class="line">
-                    <label>Selecione o arquivo</label>
-                    <input id="file_uploader" type="file" name="script" required pattern=".{1,}">
-                </div>
-
-                <div class="line">
-                    <button id="upload">Upload File</button>
-                </div>
-            </form>
+    <% if(typeof msg !== 'undefined') { %>
+        <div class="alert">
+            <p class="p_alert"><%= msg.text %></p>
         </div>
+    <% } %>
 
+    <div id="content">
         <div id="card">
             <div class="line">
                 <h2>Arquivos salvos na nuvem</h2>
@@ -45,6 +34,7 @@
                 </div>
             <% } %>
         </div>
+
     </div>
 
     <%- include('./partials/footer.ejs') %>

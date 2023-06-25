@@ -3,6 +3,7 @@ const path = require("path");
 
 const express = require("express");
 const fileUpload = require("express-fileupload");
+const fs = require('fs');
 
 router.use(fileUpload());
 
@@ -13,7 +14,13 @@ router.get("/ifcloud/home", (req, res)=>{
 });
 
 router.get("/ifcloud/file_upload", (req, res)=>{
-    res.render('file_upload');
+    fs.readdir('./uploads_src', (err, files) => {
+        if(err){
+            console.log(err);
+            return res.render('file_upload');
+        }
+        return res.render('file_upload', {files});
+    })
 });
 
 router.get("/ifcloud/json_form", (req, res)=>{
@@ -27,17 +34,3 @@ router.get("/ifcloud/about", (req, res)=>{
 router.post("/ifcloud/uploader", FileUploadController.scriptUploader);
 
 module.exports = router;
-
-/*_old
-
-/*router.get("/ifcloud/home", (req, res)=>{
-    res.sendFile("/html_src/home.html", { root: process.cwd() });
-});*/
-
-/*router.get("/ifcloud/file_uploader", (req, res)=>{
-    res.sendFile("/html_src/fileUploader.html", { root: process.cwd() });
-});*/
-
-/*router.get("/ifcloud/json_form", (req, res)=>{
-    res.sendFile("/html_src/jsonForm.html", { root: process.cwd() });
-});*/

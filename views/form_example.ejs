@@ -6,12 +6,41 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="/style.css">
-    <title>IFCloud Form Exemple</title>
+    <title>IFCloud Form Example</title>
 </head>
 <body>
     <%- include('./partials/header.ejs') %>
+    
 
-    <p> Esta dando certo !</p>
+    <div id="content">
+        <div id="card">
+            <div class="line">
+                <h2>Json Padrão</h2>
+            </div>
+
+            <div id="json" class="line">
+                <% if(typeof data !== 'undefined') { 
+                    console.log(data);
+                }
+
+                if(typeof response !== 'undefined') { 
+                    console.log(response); %>
+                    <p>{</p>
+                    <p>&nbsp;&nbsp;resourceType: '<%- response.resourceType %>',</p>
+                    <p>&nbsp;&nbsp;id: '<%- response.id %>',</p>
+                    <p>&nbsp;&nbsp;scriptName: '<%- response.scriptName %>',</p>
+                    <p>&nbsp;&nbsp;haveInputParams: <%- response.haveInputParams %>,</p>
+                    <p>&nbsp;&nbsp;inputParams: '<%- response.inputParams %>',</p>
+                    <p>&nbsp;&nbsp;component: {</p>
+                        <p>&nbsp;&nbsp;&nbsp;&nbsp;index: '<%- response.component.index %>',</p>
+                        <p>&nbsp;&nbsp;&nbsp;&nbsp;changeField: '<%- response.component.changeField %>',</p>
+                        <p>&nbsp;&nbsp;&nbsp;&nbsp;returnOnlyFieldsComponent: <%- response.component.returnOnlyFieldsComponent %></p>
+                    <p>&nbsp;&nbsp;}</p>
+                    <p>}</p>
+                <% } %>
+            </div>
+        </div>
+    </div>
 
     <%- include('./partials/footer.ejs') %>
 <body>

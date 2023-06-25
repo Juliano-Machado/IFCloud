@@ -18,9 +18,6 @@ class OperationController{
         try{
             const run = new runScript();
 
-            console.log("Body!!");
-            console.log(req.body);
-
             var resourceType = req.body.resourceType;
             var id = req.body.id;
             var scriptName = req.body.scriptName;
@@ -30,19 +27,7 @@ class OperationController{
             var inputParams = req.body.inputParams;
             var returnOnlyFieldComponent = req.body.component.returnOnlyFieldsComponent;
 
-            /*if(id != ""){
-                const { data } = await apiRequest.get('Observation/'+id);
-                if(data){
-                    var components = data.component;
-                }else{
-                    return res.send("ERRO_02 - Component Vazio");
-                }
-            }else{
-                return res.send("ERRO_01 - Campo ID nulo!");
-            }*/
             const { data } = await apiRequest.get('Observation/'+id);
-            console.log("Promisse!!");
-            console.log(data.component);
 
             var components = data.component;
 
@@ -63,7 +48,7 @@ class OperationController{
             if(scriptReturned){
                 scriptReturned = scriptReturned.replace(/(\r\n|\n|\r)/gm, "");
             }else{
-                return res.send("ERROR-00 !!! python script return error !!!")
+                return res.send("ERROR-02 !!! python script return error !!!")
             }
 
             if(componentIndex && changeField){
@@ -79,7 +64,7 @@ class OperationController{
                     return res.send("ERROR-04 !!! \"ChangeField\" does not exist !!!");
                 }
             }else{
-                return res.send("ERROR-02 !!! Empty \"Index\" or \"ChangeField\" field !!!");
+                return res.send("ERROR-04 !!! Empty \"Index\" or \"ChangeField\" field !!!");
             }
 
             if(returnOnlyFieldComponent){
@@ -92,35 +77,91 @@ class OperationController{
         }
     }
 
-    async formJson(req, res){
-        console.log(req.body);
-       /* var resourceType = req.body.resourceType;
-        var resourceId = req.body.resourceId;
-        var scriptName = req.body.scriptName;
-        var haveParams = req.body.haveParams;
-        var params = req.body.inputParams;
-        var componentIndex = req.body.componentIndex;
-        var changeField = req.body.changeField;
-        var onlyComponent = req.body.onlyComponent;
+    async myForm(req, res){
+        try{
+            const run = new runScript();
 
-        var response = {
-            "resourceType": resourceType,
-             "id": ""+resourceId,
-             "scriptName": scriptName,
-             "haveInputParams": haveParams,
-             "inputParams": [
+            var resourceType = req.body.resourceType;
+            var id = req.body.resourceId;
+            var scriptName = req.body.scriptName;
+            if(req.body.haveParams == '0'){
+                var haveInputParams = false;
+            }else{
+                var haveInputParams = true;
+            }
+            var inputParams = req.body.inputParams;
+            var componentIndex = req.body.componentIndex;
+            var changeField = req.body.changeField;
+            if(req.body.onlyComponent == '0'){
+                var returnOnlyFieldComponent = false;
+            }else{
+                var returnOnlyFieldComponent = true;
+            }
 
-             ],
-             "component": {
-               "index": ""+componentIndex,
-               "changeField": changeField,
-               "returnOnlyFieldsComponent": onlyComponent
-             }
-        }*/
+            var response = {
+                "resourceType": resourceType,
+                 "id": ""+id,
+                 "scriptName": scriptName,
+                 "haveInputParams": haveInputParams,
+                 "inputParams": [
 
-        //console.log(response);
-        //res.json(response);
-        res.json(req.body);
+                 ],
+                 "component": {
+                   "index": ""+componentIndex,
+                   "changeField": changeField,
+                   "returnOnlyFieldsComponent": returnOnlyFieldComponent
+                 }
+            }
+
+            const { data } = await apiRequest.get('Observation/'+id);
+
+            var components = data.component;
+
+            if(haveInputParams){
+                if(run.runPythonScriptNotParams(scriptName) && inputParams){
+                    var scriptReturned = run.runPythonScript(scriptName, inputParams);
+                }else{
+                    return res.send("ERROR-01 !!! Script \""+scriptName+"\" not found !!!");
+                }
+            }else{
+                if(run.runPythonScriptNotParams(scriptName)){
+                    var scriptReturned = run.runPythonScriptNotParams(scriptName);
+                }else{
+                    return res.send("ERROR-01 !!! Script \""+scriptName+"\" not found !!!");
+                }
+            }
+
+            if(scriptReturned){
+                scriptReturned = scriptReturned.replace(/(\r\n|\n|\r)/gm, "");
+            }else{
+                return res.send("ERROR-02 !!! python script return error !!!")
+            }
+
+            if(componentIndex && changeField){
+                if(components[componentIndex]){
+                    var componentChange = components[componentIndex]['valueSampledData'];
+                }else{
+                    return res.send("ERROR-03 !!! \"Index\" does not exist !!!");
+                }
+
+                if(componentChange[changeField]){
+                    componentChange[changeField] = scriptReturned;
+                }else{
+                    return res.send("ERROR-04 !!! \"ChangeField\" does not exist !!!");
+                }
+            }else{
+                return res.send("ERROR-04 !!! Empty \"Index\" or \"ChangeField\" field !!!");
+            }
+
+            if(returnOnlyFieldComponent){
+                return res.render('form_example', {data: components[componentIndex], response});
+            }
+
+            console.log(data);
+            return res.render('form_example', {data, response});
+        }catch(e){
+            return res.status(e.statusCode || 500).json(e);
+        }
     }
 }
 

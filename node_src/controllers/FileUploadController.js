@@ -1,6 +1,5 @@
 const path = require("path");
 const fs = require("fs");
-const router = require("express").Router();
 
 class FileUploaderController{
     async scriptUploader(req, res){
@@ -10,11 +9,17 @@ class FileUploaderController{
             var scriptExtName = path.extname(scriptName.toLowerCase());
             var filetype = /.py/;
 
-            const msg = { text: "|*| Sucessfull Upload |*|" };
+            const msg = { text: "|o| Sucessfull Upload |o|" };
 
             if (!filetype.test(scriptExtName)) {
                 msg.text = "Error: File upload only supports the following filetypes - " +filetype;
-                return res.render('file_upload', {msg});
+                fs.readdir('./uploads_src', (err, files) => {
+                    if(err){
+                        return res.render('server_files', {msg});
+                    }
+                    return res.render('server_files', {files, msg});
+                })
+                return;
             }
 
             if(fs.existsSync("./uploads_src/"+scriptName)){
@@ -23,7 +28,12 @@ class FileUploaderController{
 
             script.mv("./uploads_src/"+scriptName);
 
-            return res.render('file_upload', {msg});
+            fs.readdir('./uploads_src', (err, files) => {
+                if(err){
+                    return res.render('server_files', {msg});
+                }
+                return res.render('server_files', {files, msg});
+            });
         }catch(e){
             console.log(e);
             return res.status(e.statusCode || 500).json(e.message);
