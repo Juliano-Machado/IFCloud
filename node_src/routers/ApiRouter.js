@@ -31,6 +31,10 @@ router.get("/ifcloud/about", (req, res)=>{
     res.render('about');
 });
 
+router.get("/ifcloud/form_example", (req, res)=>{
+    res.render('form_example', {req});
+});
+
 router.post("/ifcloud/uploader", FileUploadController.scriptUploader);
 
 module.exports = router;

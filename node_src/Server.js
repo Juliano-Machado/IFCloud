@@ -1,6 +1,5 @@
 const path = require("path");
 const express = require("express");
-//const fileUpload = require("express-fileupload");
 const app = express();
 const bp = require('body-parser');
 const apiRouter = require('./routers/ApiRouter');

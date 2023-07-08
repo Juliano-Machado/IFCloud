@@ -18,27 +18,58 @@
                 <h2>Json Padrão</h2>
             </div>
 
-            <div id="json" class="line">
-                <% if(typeof data !== 'undefined') { 
-                    console.log(data);
-                }
+            <% 
+            if(typeof response !== 'undefined') { 
+                console.log(response);
+            %>
+                <div id="json" class="line">
+                    <p>
+                        {<br>
+                            &nbsp;&nbsp;resourceType: '<%- response.resourceType %>',<br>
+                            &nbsp;&nbsp;id: '<%- response.id %>',<br>
+                            &nbsp;&nbsp;scriptName: '<%- response.scriptName %>',<br>
+                            &nbsp;&nbsp;component: {<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;index: '<%- response.component.index %>',<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;changeField: '<%- response.component.changeField %>',<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;returnOnlyFieldsComponent: <%- response.component.returnOnlyFieldsComponent %><br>
+                            &nbsp;&nbsp;}<br>
+                        }
+                    </p>
+                </div>
 
-                if(typeof response !== 'undefined') { 
-                    console.log(response); %>
-                    <p>{</p>
-                    <p>&nbsp;&nbsp;resourceType: '<%- response.resourceType %>',</p>
-                    <p>&nbsp;&nbsp;id: '<%- response.id %>',</p>
-                    <p>&nbsp;&nbsp;scriptName: '<%- response.scriptName %>',</p>
-                    <p>&nbsp;&nbsp;haveInputParams: <%- response.haveInputParams %>,</p>
-                    <p>&nbsp;&nbsp;inputParams: '<%- response.inputParams %>',</p>
-                    <p>&nbsp;&nbsp;component: {</p>
-                        <p>&nbsp;&nbsp;&nbsp;&nbsp;index: '<%- response.component.index %>',</p>
-                        <p>&nbsp;&nbsp;&nbsp;&nbsp;changeField: '<%- response.component.changeField %>',</p>
-                        <p>&nbsp;&nbsp;&nbsp;&nbsp;returnOnlyFieldsComponent: <%- response.component.returnOnlyFieldsComponent %></p>
-                    <p>&nbsp;&nbsp;}</p>
-                    <p>}</p>
-                <% } %>
+                <div id="json" class="line">
+                    <p>
+                        Campo Original: <%- response.originalComponent %><br>
+                        Campo a ser Alterado: <%- response.component.changeField %><br>
+                    </p>
+                </div>
+            <% 
+            } 
+            %>
+        </div>
+
+        <div id="card">
+            <div class="line">
+                <h2>Campo Alterado</h2>
             </div>
+
+            <%
+            if(typeof data !== 'undefined') {
+                console.log(data.valueSampledData);
+            %>
+            <div id="json" class="line">
+                <p>
+                    Period: <%- data.valueSampledData.period %><br>
+                    Factor: <%- data.valueSampledData.factor %><br>
+                    LowerLimit: <%- data.valueSampledData.lowerLimit %><br>
+                    UpperLimit: <%- data.valueSampledData.upperLimit %><br>
+                    Dimensions: <%- data.valueSampledData.dimensions %><br>
+                    Data: <%- data.valueSampledData.data %><br>
+                </p>
+            </div>
+            <%
+            }
+            %>
         </div>
     </div>
 

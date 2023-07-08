@@ -1,5 +1,5 @@
 import sys
 
-print("Hello World")
+print("Hello, World!")
 
 sys.stdout.flush()

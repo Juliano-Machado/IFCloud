@@ -19,7 +19,7 @@ for value in sys.argv[1:]:
 
 res = {
     "Response": 200,
-    "Script Name": sys.argv[1],
+    "Script Name": sys.argv[0],
     "Message": text
 }
 
